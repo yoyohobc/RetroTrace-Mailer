@@ -6,7 +6,7 @@
 
 <a name="chinese"></a>
 
-# 🇹🇼 股市回檔自動化郵件通知系統
+# 股市回檔自動化郵件通知系統
 
 ![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)
 ![Github Actions](https://img.shields.io/badge/Actions-Scheduled-success.svg)
@@ -125,7 +125,7 @@ on:
 
 <a name="english"></a>
 
-# 🇺🇸 Taiwan Stock Retrace Automated Notification System
+# Taiwan Stock Retrace Automated Notification System
 
 ![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)
 ![Github Actions](https://img.shields.io/badge/Actions-Scheduled-success.svg)
