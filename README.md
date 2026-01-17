@@ -104,6 +104,14 @@ elif max_drawdown_level >= 5:
 else:
     report_content += "✅ 市場趨勢強勁。"        # 5% 以下顯示
 ```
+### 4. 調整執行時間 (Schedule)
+編輯 .github/workflows/main.yml 檔案中的 cron 設定：
+```yaml
+on:
+  schedule:
+    # 範例：台灣時間週一至週五 13:30 執行 (UTC 05:30)
+    - cron: '30 5 * * 1-5'
+```
 ## 📅 執行時間說明
 本系統設定為週一至週五 **台灣時間 13:30 (UTC 05:30)** 執行。
 
@@ -216,6 +224,15 @@ elif max_drawdown_level >= 5:
     report_content += "📈 Note: Short-term Consolidation"         # Triggered if 5% ~ 10%
 else:
     report_content += "✅ Strong Market Trend."
+```
+
+### 4. Adjust Execution Schedule
+Edit the cron setting in the .github/workflows/main.yml file：
+```yaml
+on:
+  schedule:
+    # Example: Runs at 13:30 Taiwan Time, Mon-Fri (UTC 05:30)
+    - cron: '30 5 * * 1-5'
 ```
 
 ## 📅 Execution Schedule
