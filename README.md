@@ -13,13 +13,18 @@
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ## 📋 專案簡介
-這是一個自動化的台股監控工具，旨在追蹤標的（如台股基金、ETF 或個別股票）相對於 **年度最高點** 的回檔幅度。透過 GitHub Actions 每日自動執行，當標的跌幅達到預設的「回檔買進區間」時，系統將自動發送 Email 提醒，協助投資者克服恐懼，落實紀律投資。
+這是一個自動化的台股監控工具，旨在追蹤標的（如台股基金、ETF 或個別股票）相對於 **年度最高點** 的回檔幅度。透過 GitHub Actions 每日自動執行，當標的跌幅達到預設的「回檔區間」時，系統將自動發送 Email 提醒，協助投資者克服恐懼，落實紀律投資。
 
 ## ✨ 主要功能
 * **多標的支援**：支援所有 Yahoo Finance 可查詢之台股代號（如 `2330.TW`, `0050.TW`）。
-* **動態回檔計算**：自動抓取過去 252 個交易日數據，計算滾動最高點（Rolling High）與當前跌幅。
-* **雲端全自動化**：不需維持電腦開啟，利用 GitHub Actions 於每日台股收盤後（13:30 CST）自動掃描。
-* **隱私安全**：採用 GitHub Secrets 加密技術，確保 Gmail 授權金鑰不外洩。
+* **動態回檔計算**：自動抓取過去 252 個交易日數據，計算滾動最高點（Rolling High）。
+* **智能觸發通知**：
+    * **預設門檻**：當一年內高點回檔達 **5%** 時觸發通知。
+    * **自動評價**：根據跌幅深度自動給予「短期整理」或「超跌警報」等評價。
+* **雲端全自動化**：利用 GitHub Actions 每日自動掃描，無需手動操作。
+
+### 📩 郵件通知的預覽
+![Email Report Example](images/screenshot.png)
 
 ## 🛠️ 技術說明
 * **數據來源**：`yfinance` (Yahoo Finance API)
@@ -44,6 +49,34 @@
 ### 3. 自定義監控標的
 編輯 `retro_trace_github.py` 中的 `ticker_symbol` 變數。
 
+### 4. 核心判斷邏輯
+系統針對「一年期」的回檔幅度進行判定，可修改回檔幅度或高點區間長度：
+
+```python
+# 判斷是否觸發門檻 (以一年高點回檔為基準)
+if p_name == "一年":
+    # 當一年回檔幅度達到 5% 時，標記為觸發告警
+    if dd >= 5:
+        alert_triggered = True
+
+    # 紀錄並更新該標的的年度最大回測數值
+    max_drawdown_level = max(max_drawdown_level, dd)
+```
+### 5. 修改觸發門檻與總結邏輯
+本系統內建了自動分級功能。若欲調整通知門檻或修改總結文字，請編輯 `retro_trace_github.py`：
+
+```python
+# 報表結尾會根據最大回檔幅度 (max_drawdown_level) 自動判定：
+report_content += "--- 總結 ---\n"
+if max_drawdown_level >= 15:
+    report_content += "🔥 警報：市場進入超跌區"  # 超過 15% 顯示
+elif max_drawdown_level >= 10:
+    report_content += "💎 提醒：中度修正達成"    # 10% ~ 15% 顯示
+elif max_drawdown_level >= 5:
+    report_content += "📈 提示：短期整理"        # 5% ~ 10% 顯示
+else:
+    report_content += "✅ 市場趨勢強勁。"        # 5% 以下顯示
+```
 ## 📅 執行時間說明
 本系統設定為週一至週五 **台灣時間 13:30 (UTC 05:30)** 執行。
 
@@ -57,42 +90,79 @@
 
 <a name="english"></a>
 
-# 🇹🇼 RetroTrace Mailer
+# 🇺🇸 Taiwan Stock Retrace Automated Notification System
 
 ![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)
 ![Github Actions](https://img.shields.io/badge/Actions-Scheduled-success.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ## 📋 Project Introduction
-An automated monitoring tool for the Taiwan stock market, tracking drawdowns relative to **annual highs**. Using GitHub Actions, the system sends email alerts when prices fall into a predefined "buy zone," assisting disciplined investing.
+This is an automated monitoring tool for the Taiwan stock market, designed to track the drawdown of specific targets (such as mutual funds, ETFs, or individual stocks) relative to their **annual highs**. By leveraging GitHub Actions for daily execution, the system automatically sends email alerts when the price falls into a predefined "buy zone," helping investors overcome emotional bias and maintain disciplined investing.
 
 ## ✨ Key Features
-* **Multi-Target Support**: Supports any ticker on Yahoo Finance (e.g., `2330.TW`, `0050.TW`).
-* **Dynamic Drawdown Calculation**: Computes rolling highs and drawdowns from the past 252 trading days.
-* **Cloud Automation**: Runs automatically via GitHub Actions post-market (13:30 CST).
-* **Privacy & Security**: Secured with GitHub Secrets for Gmail authorization.
+* **Multi-Target Support**: Supports any Taiwan stock ticker available on Yahoo Finance (e.g., `2330.TW`, `0050.TW`).
+* **Dynamic Drawdown Calculation**: Automatically fetches data from the past 252 trading days to calculate the rolling high.
+* **Intelligent Notification Trigger**:
+    * **Default Threshold**: Sends an alert when the 1-year drawdown reaches **5%**.
+    * **Automatic Grading**: Provides status updates like "Short-term Consolidation" or "Oversold Alert" based on the correction depth.
+* **Cloud Automation**: Runs automatically via GitHub Actions daily without manual operation.
+
+### 📩 Email Notification Preview
+![Email Report Example](images/screenshot.png)
 
 ## 🛠️ Technical Specifications
 * **Data Source**: `yfinance` (Yahoo Finance API)
 * **Data Processing**: `pandas`, `numpy`
-* **Automation**: GitHub Actions (Ubuntu-latest)
-* **Core Logic**: Drawdown formula based on 1-year (252 trading days) rolling high.
-* **Environment Variables**: Defined `GMAIL_USER` and `GMAIL_PASSWORD` interfaces.
+* **Automation Scheduler**: GitHub Actions (Ubuntu-latest)
+* **Email Notification**: Python `smtplib`
+* **Core Logic**: Implementation of a drawdown formula based on a 1-year (252 trading days) rolling high.
+* **Environment Variable Architecture**: Defined `GMAIL_USER` and `GMAIL_PASSWORD` interfaces.
 
 ---
 
 ## 🚀 Quick Start
 
 ### 1. Obtain Gmail App Password
-Enable "2-Step Verification" in your Google Account and generate a 16-digit **"App Password."**
+Go to your Google Account security settings, enable "2-Step Verification," and generate a 16-digit **"App Password."**
 
 ### 2. Configure GitHub Secrets
-Go to `Settings > Secrets and variables > Actions`, and add:
-* `GMAIL_USER`: Your Gmail account.
-* `GMAIL_PASSWORD`: The 16-digit App Password.
+In your GitHub repository, navigate to `Settings > Secrets and variables > Actions`, and add:
+* `GMAIL_USER`: Your Gmail account for sending/receiving.
+* `GMAIL_PASSWORD`: The 16-digit App Password generated above.
 
-### 3. Customize Targets
+### 3. Customize Monitoring Targets
 Edit the `ticker_symbol` variable in `retro_trace_github.py`.
+
+### 4. Core Detection Logic
+The system monitors the "1-Year" drawdown window. You can modify the drawdown threshold or the lookback period:
+```python
+# The report summary will be automatically determined based on the max_drawdown_level:
+report_content += "--- Summary ---\n"
+if max_drawdown_level >= 15:
+    report_content += "🔥 Alert: Market Entering Oversight/Oversold Zone"  # Triggered if > 15%
+elif max_drawdown_level >= 10:
+    report_content += "💎 Reminder: Moderate Correction Reached"         # Triggered if 10% ~ 15%
+elif max_drawdown_level >= 5:
+    report_content += "📈 Note: Short-term Consolidation"                # Triggered if 5% ~ 10%
+else:
+    report_content += "✅ Strong Market Trend."                          # Triggered if < 5%
+```
+
+### 5. Customize Thresholds & Summary Logic
+The system features integrated grading logic.
+To adjust notification thresholds or customize the summary text, edit `retro_trace_github.py`:
+```python
+# The report summary will be automatically determined based on the max_drawdown_level:
+report_content += "--- Summary ---\n"
+if max_drawdown_level >= 15:
+    report_content += "🔥 Alert: Market Entering Oversold Zone"  # Triggered if > 15%
+elif max_drawdown_level >= 10:
+    report_content += "💎 Reminder: Moderate Correction Reached" # Triggered if 10% ~ 15%
+elif max_drawdown_level >= 5:
+    report_content += "📈 Note: Short-term Consolidation"         # Triggered if 5% ~ 10%
+else:
+    report_content += "✅ Strong Market Trend."
+```
 
 ## 📅 Execution Schedule
 The system is scheduled for Monday through Friday at **13:30 Taiwan Time (05:30 UTC)**.
