@@ -77,7 +77,7 @@
 編輯 `retro_trace_github.py` 中的 `ticker_symbol` 變數。
 
 ### 2. 核心判斷邏輯
-系統針對「一年期」的回檔幅度進行判定，可修改回檔幅度或高點區間長度：
+系統針對「一年期」的回檔幅度進行判定，可修改回檔幅度或高點區間長度，請編輯 `retro_trace_github.py`：
 
 ```python
 # 判斷是否觸發門檻 (以一年高點回檔為基準)
@@ -196,18 +196,16 @@ If you need to adjust the monitoring content, you can make the following modific
 Edit the `ticker_symbol` variable in `retro_trace_github.py`.
 
 ### 2. Core Detection Logic
-The system monitors the "1-Year" drawdown window. You can modify the drawdown threshold or the lookback period:
+The system monitors the "1-Year" drawdown window. You can modify the drawdown threshold or the lookback period, edit `retro_trace_github.py`：
 ```python
-# The report summary will be automatically determined based on the max_drawdown_level:
-report_content += "--- Summary ---\n"
-if max_drawdown_level >= 15:
-    report_content += "🔥 Alert: Market Entering Oversight/Oversold Zone"  # Triggered if > 15%
-elif max_drawdown_level >= 10:
-    report_content += "💎 Reminder: Moderate Correction Reached"         # Triggered if 10% ~ 15%
-elif max_drawdown_level >= 5:
-    report_content += "📈 Note: Short-term Consolidation"                # Triggered if 5% ~ 10%
-else:
-    report_content += "✅ Strong Market Trend."                          # Triggered if < 5%
+# Check if the threshold is triggered (based on a 1-year high retracement)
+if p_name == "One Year":
+    # Trigger an alert when the 1-year retracement reaches 5%
+    if dd >= 5:
+        alert_triggered = True
+
+    # Record and update the maximum drawdown level for the ticker
+    max_drawdown_level = max(max_drawdown_level, dd)
 ```
 
 ### 3. Customize Thresholds & Summary Logic
