@@ -7,6 +7,7 @@ from datetime import datetime
 # --- 從 GitHub Secrets 讀取設定 ---
 GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
+TRIGGER_EVENT = os.getenv('TRIGGER_EVENT', 'unknown')
 
 RECEIVER_EMAIL = GMAIL_USER # 預設寄給自己
 
@@ -14,7 +15,7 @@ def get_analysis():
     tickers = {"大盤": "^TWII", "台積電": "2330.TW"}
     periods = {"半年": 125, "一年": 250, "兩年": 500}
 
-    alert_triggered = False
+    alert_triggered = TRIGGER_EVENT == 'workflow_dispatch'
     report_content = "### 台股回檔監測報告 ###\n\n"
     max_drawdown_level = 0
 

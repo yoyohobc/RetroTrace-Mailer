@@ -27,4 +27,5 @@ jobs:
           # 從 GitHub Secrets 讀取變數
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          TRIGGER_EVENT: ${{ github.event_name }}
         run: python retro_trace_github.py

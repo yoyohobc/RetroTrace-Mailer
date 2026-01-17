@@ -38,18 +38,45 @@
 
 ## 🚀 快速開始
 
-### 1. 取得 Gmail 應用程式密碼
+### 1. Fork 本專案
+點擊頁面右上角的 Fork 按鈕，將此專案複製到您自己的帳號下。
+
+### 2. 取得 Gmail 應用程式密碼
 請至 Google 帳號安全性設定中開啟「兩步驗證」，並產生一組 16 位元的 **「應用程式密碼 (App Password)」**。
 
-### 2. 設定 GitHub Secrets
+### 3. 設定 GitHub Secrets
 前往 `Settings > Secrets and variables > Actions`，新增：
 * `GMAIL_USER`: 您的 Gmail 帳號。
 * `GMAIL_PASSWORD`: 16 位應用程式密碼。
 
-### 3. 自定義監控標的
+### 4. 啟用 Actions 權限
+前往專案頂部的 Actions 標籤頁。
+
+點擊 "I understand my workflows, go ahead and enable them"。這表示你允許此 Repo 運行任何腳本。
+
+啟用排程任務
+在 Actions 頁面左側，點擊你的任務名稱：RetroTrace Taiwan Daily Check。
+
+如果看到上方有一條黃色或藍色的提示列寫著 "Scheduled workflows are disabled by default when forking a repository"，請點擊旁邊的 "Enable workflow" 按鈕。
+
+### 5. 手動觸發測試
+為了確保設定正確，請立即進行一次手動測試：
+1. 在 **Actions** 頁面選中 `RetroTrace Taiwan Daily Check`。
+2. 點擊右側的 **Run workflow** 按鈕。
+
+> [!TIP]
+> **通知邏輯說明：**
+> * **手動觸發 (Manual)：** 系統會 **強制發送** 郵件（不論是否達到回檔門檻），方便立即驗證。
+> * **自動排程 (Schedule)：** 系統僅在偵測到股價 **達到回檔門檻** 時，才會發送通知郵件，避免非必要的干擾。
+
+## 🛠 進階自定義 (Optional)
+
+如果您需要調整監控內容，可以進行以下修改：
+
+### 1. 自定義監控標的
 編輯 `retro_trace_github.py` 中的 `ticker_symbol` 變數。
 
-### 4. 核心判斷邏輯
+### 2. 核心判斷邏輯
 系統針對「一年期」的回檔幅度進行判定，可修改回檔幅度或高點區間長度：
 
 ```python
@@ -62,7 +89,7 @@ if p_name == "一年":
     # 紀錄並更新該標的的年度最大回測數值
     max_drawdown_level = max(max_drawdown_level, dd)
 ```
-### 5. 修改觸發門檻與總結邏輯
+### 3. 修改觸發門檻與總結邏輯
 本系統內建了自動分級功能。若欲調整通知門檻或修改總結文字，請編輯 `retro_trace_github.py`：
 
 ```python
@@ -122,18 +149,45 @@ This is an automated monitoring tool for the Taiwan stock market, designed to tr
 
 ## 🚀 Quick Start
 
-### 1. Obtain Gmail App Password
-Go to your Google Account security settings, enable "2-Step Verification," and generate a 16-digit **"App Password."**
+### 1. Fork this Repository
+Click the **Fork** button at the top-right of the page to copy this project to your own GitHub account.
 
-### 2. Configure GitHub Secrets
-In your GitHub repository, navigate to `Settings > Secrets and variables > Actions`, and add:
-* `GMAIL_USER`: Your Gmail account for sending/receiving.
-* `GMAIL_PASSWORD`: The 16-digit App Password generated above.
+### 2. Get Gmail App Password
+Go to your Google Account security settings, enable "2-Step Verification," and generate a 16-digit **"App Password"**.
 
-### 3. Customize Monitoring Targets
+### 3. Configure GitHub Secrets
+Navigate to `Settings > Secrets and variables > Actions` in your forked repository and add the following:
+* `GMAIL_USER`: Your Gmail address.
+* `GMAIL_PASSWORD`: The 16-digit App Password you generated.
+
+### 4. Enable Actions Permissions
+Go to the **Actions** tab at the top of the repository.
+
+1. Click **"I understand my workflows, go ahead and enable them"** to allow this repository to run scripts.
+2. **Enable Scheduled Tasks**:
+   * Click the workflow name **"RetroTrace Taiwan Daily Check"** on the left sidebar.
+   * If you see a yellow or blue notification bar stating *"Scheduled workflows are disabled by default when forking a repository"*, click the **"Enable workflow"** button next to it.
+
+### 5. Manual Trigger Test
+To ensure everything is configured correctly, please perform a manual test immediately:
+1. Under the **Actions** tab, select `RetroTrace Taiwan Daily Check`.
+2. Click the **Run workflow** button on the right.
+
+> [!TIP]
+> **Notification Logic:**
+> * **Manual Trigger:** The system will **force send** an email (regardless of whether the retracement threshold is met) for immediate verification.
+> * **Scheduled Trigger:** The system will **only send** an email when the stock price **reaches the retracement threshold** to avoid unnecessary alerts.
+
+---
+
+## 🛠 Advanced Customization (Optional)
+
+If you need to adjust the monitoring content, you can make the following modifications:
+
+### 1. Customize Monitoring Targets
 Edit the `ticker_symbol` variable in `retro_trace_github.py`.
 
-### 4. Core Detection Logic
+### 2. Core Detection Logic
 The system monitors the "1-Year" drawdown window. You can modify the drawdown threshold or the lookback period:
 ```python
 # The report summary will be automatically determined based on the max_drawdown_level:
@@ -148,7 +202,7 @@ else:
     report_content += "✅ Strong Market Trend."                          # Triggered if < 5%
 ```
 
-### 5. Customize Thresholds & Summary Logic
+### 3. Customize Thresholds & Summary Logic
 The system features integrated grading logic.
 To adjust notification thresholds or customize the summary text, edit `retro_trace_github.py`:
 ```python
