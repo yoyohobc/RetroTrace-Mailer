@@ -1,4 +1,4 @@
-# Taiwan Stock Retrace Monitor - 台股回檔監控系統
+# 📬 RetroTrace Mailer - 台灣股市回檔自動化郵件通知系統
 
 [中文說明](#chinese) | [English Description](#english)
 
@@ -6,7 +6,7 @@
 
 <a name="chinese"></a>
 
-# 🇹🇼 台股回檔監控系統
+# 🇹🇼 股市回檔自動化郵件通知系統
 
 ![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)
 ![Github Actions](https://img.shields.io/badge/Actions-Scheduled-success.svg)
@@ -57,7 +57,7 @@
 
 <a name="english"></a>
 
-# 🇹🇼 Taiwan Stock Retrace Monitor
+# 🇹🇼 RetroTrace Mailer
 
 ![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)
 ![Github Actions](https://img.shields.io/badge/Actions-Scheduled-success.svg)
