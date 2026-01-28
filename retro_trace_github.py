@@ -62,6 +62,7 @@ def send_email(content: str):
 
 if __name__ == "__main__":
     triggered, content = get_analysis()
+    print(content)
     # 只要有回檔 5% 以上就寄信，或你可以改成每次收盤都寄
     if triggered:
         send_email(content)
