@@ -23,7 +23,7 @@ def get_analysis():
         data = yf.Ticker(symbol).history(period="3y")
         if data.empty: continue
 
-        current_price = data['Close'].iloc[-1]
+        current_price = yf.Ticker(symbol).fast_info['last_price']
         report_content += f"【{name}】目前價格: {current_price:.2f}\n"
 
         for p_name, days in periods.items():
