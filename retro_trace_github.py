@@ -12,7 +12,7 @@ TRIGGER_EVENT = os.getenv('TRIGGER_EVENT', 'unknown')
 RECEIVER_EMAIL = GMAIL_USER # 預設寄給自己
 
 def get_analysis():
-    tickers = {"大盤": "^TWII", "台積電": "2330.TW", "安聯台灣科技基金": "F0HKG05X22.FO"}
+    tickers = {"大盤": "^TWII", "台積電": "2330.TW"}
     periods = {"半年": 125, "一年": 250, "兩年": 500}
 
     alert_triggered = TRIGGER_EVENT == 'workflow_dispatch'
