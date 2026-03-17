@@ -109,14 +109,14 @@ else:
 ```yaml
 on:
   schedule:
-    # 範例：台灣時間週一至週五 13:30 執行 (UTC 05:30)
-    - cron: '30 5 * * 1-5'
+    # 範例：台灣時間週一至週五 13:00 執行 (UTC 05:00)
+    - cron: '00 5 * * 1-5'
 ```
 ## 📅 執行時間說明
-本系統設定為週一至週五 **台灣時間 13:30 (UTC 05:30)** 執行。
+本系統設定為週一至週五 **台灣時間 13:00 (UTC 05:00)** 執行。
 
 > [!IMPORTANT]
-> **關於執行延遲**：由於 GitHub Actions 的免費伺服器排隊機制，自動排程通常會有 **10 到 30 分鐘的隨機延遲**。若任務未準時於 13:30 啟動，屬正常現象。
+> **關於執行延遲**：由於 GitHub Actions 的免費伺服器排隊機制，自動排程通常會有 **10 到 60 分鐘的隨機延遲**。若任務未準時於 13:00 啟動，屬正常現象。
 
 ## 📝 免責聲明
 本工具僅供策略研究使用，不保證數據之絕對準確性。投資者應自行評估風險。
@@ -229,15 +229,15 @@ Edit the cron setting in the .github/workflows/main.yml file：
 ```yaml
 on:
   schedule:
-    # Example: Runs at 13:30 Taiwan Time, Mon-Fri (UTC 05:30)
-    - cron: '30 5 * * 1-5'
+    # Example: Runs at 13:00 Taiwan Time, Mon-Fri (UTC 05:00)
+    - cron: '00 5 * * 1-5'
 ```
 
 ## 📅 Execution Schedule
-The system is scheduled for Monday through Friday at **13:30 Taiwan Time (05:30 UTC)**.
+The system is scheduled for Monday through Friday at **13:00 Taiwan Time (05:00 UTC)**.
 
 > [!IMPORTANT]
-> **Scheduling Delay**: Due to GitHub Actions' shared infrastructure, scheduled tasks may experience a **10 to 30-minute delay** depending on server load. It is normal if the workflow does not start precisely at 13:30.
+> **Scheduling Delay**: Due to GitHub Actions' shared infrastructure, scheduled tasks may experience a **10 to 60-minute delay** depending on server load. It is normal if the workflow does not start precisely at 13:00.
 
 ## 📝 Disclaimer
 This tool is for strategic research only. Data accuracy is not guaranteed. Investors should assess risks independently.
