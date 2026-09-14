@@ -1,8 +1,8 @@
 name: RetroTrace Taiwan Daily Check
 on:
   schedule:
-    # 台灣時間週一至週五 09:30 執行 (UTC 01:30)
-    - cron: '30 1 * * 1-5'
+    # 台灣時間週一至週五 07:30 執行 (UTC 週日 ~ 週四 23:30)
+    - cron: '30 23 * * 0-4'
   workflow_dispatch: # 允許你手動點擊按鈕執行測試
 jobs:
   build:
