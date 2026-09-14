@@ -7,7 +7,6 @@ from datetime import datetime
 # --- 從 GitHub Secrets / 環境變數讀取設定 ---
 GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
-TRIGGER_EVENT = os.getenv('TRIGGER_EVENT', 'unknown')
 
 # 主收件人固定為寄件者自己；第二收件人則由 Secret 帶入，可為單一信箱或逗號分隔多個信箱
 RECEIVER_EMAIL = GMAIL_USER
@@ -15,9 +14,10 @@ SECOND_RECEIVER = os.getenv('SECOND_RECEIVER', '')
 SELF_ONLY_MANUAL = os.getenv('SELF_ONLY_MANUAL', 'false').lower() in ('true', '1', 'yes')
 
 
-def build_recipients(trigger_event, trigger_state, receiver_email, second_receiver, self_only_manual=False):
-    """依照觸發來源與回檔區間門檻決定寄送清單。手動觸發時可選擇只寄主收件人，完全不走回檔條件。"""
-    if trigger_event == 'workflow_dispatch' and self_only_manual:
+def build_recipients(trigger_state, receiver_email, second_receiver, self_only_manual=False):
+    """依照回檔區間門檻決定寄送清單。若手動參數開啟，則只寄主收件人。"""
+    # 手動只寄自己：優先走這個單人手動模式
+    if self_only_manual:
         return [receiver_email] if receiver_email else []
 
     # 第二收件人可為單一信箱或逗號分隔多個信箱
@@ -123,17 +123,10 @@ def send_email(content: str, recipients: list):
 
 
 if __name__ == "__main__":
-    # 手動觸發且設定為只寄給自己時，直接跳過分析與回檔門檻
-    if TRIGGER_EVENT == 'workflow_dispatch' and SELF_ONLY_MANUAL:
-        recipients = [RECEIVER_EMAIL] if RECEIVER_EMAIL else []
-        send_email("### 台股回檔監測報告 ###\n\n手動觸發：僅寄給主收件人\n", recipients)
-        print("已手動觸發僅寄主收件人郵件")
-        raise SystemExit(0)
-
     trigger_state, max_drawdown_level, content = get_analysis()
     print(content)
 
-    recipients = build_recipients(TRIGGER_EVENT, trigger_state, RECEIVER_EMAIL, SECOND_RECEIVER, SELF_ONLY_MANUAL)
+    recipients = build_recipients(trigger_state, RECEIVER_EMAIL, SECOND_RECEIVER, SELF_ONLY_MANUAL)
     if recipients:
         send_email(content, recipients)
         print("已發送回檔警報郵件")

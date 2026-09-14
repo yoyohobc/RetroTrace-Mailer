@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # 允許你手動點擊按鈕執行測試
     inputs:
       self_only_manual:
-        description: '手動觸發時是否只寄給自己，不走回檔門檻判斷'
+        description: '手動觸發時是否只寄給主收件人（跳過回檔門檻）'
         required: true
         type: boolean
         default: true
@@ -29,6 +29,5 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           SECOND_RECEIVER: ${{ secrets.SECOND_RECEIVER }}
-          TRIGGER_EVENT: ${{ github.event_name }}
           SELF_ONLY_MANUAL: ${{ github.event.inputs.self_only_manual }}
         run: python retro_trace_github.py
