@@ -8,7 +8,7 @@ from datetime import datetime
 GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 
-# 主收件人固定為寄件者自己；第二收件人則由 Secret 帶入，可為單一信箱或逗號分隔多個信箱
+#主收件人固定為寄件者自己；第二收件人則由 Secret 帶入，可為單一信箱或逗號分隔多個信箱
 RECEIVER_EMAIL = GMAIL_USER
 SECOND_RECEIVER = os.getenv('SECOND_RECEIVER', '')
 SELF_ONLY_MANUAL = os.getenv('SELF_ONLY_MANUAL', 'false').lower() in ('true', '1', 'yes')
